@@ -1,25 +1,34 @@
 import requests
 import logging
 
+#from tracker.models import AboutSpacex
 
-url = "https://api.spacexdata.com/v4/company"
+
+COMPANY_URL = "https://api.spacexdata.com/v4/company"
+UPCOMING_LAUNCHES_URL = "https://api.spacexdata.com/v4/launches/upcoming"
+
+
+def get(url):
+    try:
+        data = requests.get(url).text
+        return data
+    except Exception as e:
+        logger.error(e)
+        return
+
+
+def get_company_data(url):
+    data = get(url)
+
+
+def get_upcoming_launches_data(url):
+    data = get(url)
 
 
 def main():
     logger.debug("Parser started")
-    data = requests.get(url).json()
-    if type(data) == dict:
-        get_keys_and_values_from_dict(d=data)
-
-
-def get_keys_and_values_from_dict(d: dict):
-    for key in d:
-        value = d[key]
-        print(f"{key}: {value}")
-        if type(value) == dict:
-            get_keys_and_values_from_dict(d=value)
-
-
+    get_company_data(COMPANY_URL)
+    get_upcoming_launches_data(UPCOMING_LAUNCHES_URL)
 
 
 if __name__ == "__main__":
